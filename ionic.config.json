@@ -1,0 +1,7 @@
+{
+  "name": "AngularFire",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
