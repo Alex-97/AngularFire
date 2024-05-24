@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import { Firestore, collection, collectionData, addDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-tab2',
@@ -11,10 +14,22 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
 })
 export class Tab2Page {
 
-  constructor() {}
+  firestore: Firestore = inject(Firestore);
+  items$: Observable<any[]>;
+  constructor() {
+    const aCollection = collection(this.firestore, 'room_1');
+    this.items$ = collectionData(aCollection);
+  }
 
-  addToList() {
-    console.log('Add to list clicked');
+  async addToList() {
+      const aCollection = collection(this.firestore, 'room_1');
+      const timestamp = new Date(); // Current date and time
+  
+      await addDoc(aCollection, {
+        author: "Tim",
+        text: "TestAlex",
+        timestamp: timestamp
+      });
   }
 
 }

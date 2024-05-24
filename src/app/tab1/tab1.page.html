@@ -12,9 +12,19 @@
       <ion-title size="large">Chat</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ul>
-    <li class="text" *ngFor="let item of items$ | async">
-      {{item.name}}
-    </li>
-  </ul>
+  <ion-content>
+    <div class="chat-container">
+      <div *ngFor="let item of items$ | async" class="chat-bubble" [ngClass]="{'self': item.author === 'Alex'}">
+        <div class="chat-author">{{item.author}}</div>
+        <div class="chat-text">{{item.text}}</div>
+        <div class="chat-timestamp">{{item.timestamp.toDate() | date:'shortTime'}}</div>
+      </div>
+    </div>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar>
+      <ion-input [(ngModel)]="newMessage" placeholder="Type a message"></ion-input>
+      <ion-button (click)="sendNewMessage()">Send</ion-button>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>
