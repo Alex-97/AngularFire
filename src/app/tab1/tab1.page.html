@@ -12,6 +12,9 @@
       <ion-title size="large">Chat</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  <app-explore-container name="Chat"></app-explore-container>
+  <ul>
+    <li class="text" *ngFor="let item of items$ | async">
+      {{item.name}}
+    </li>
+  </ul>
 </ion-content>
