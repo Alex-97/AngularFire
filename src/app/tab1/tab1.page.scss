@@ -7,8 +7,20 @@
 ion-input {
     --padding-end: 1rem;
     --padding-start: 1rem;
-    background:gray;
+    background:rgb(78, 78, 78);
     width: 80%;
     margin: 10px;
     --border-radius: 40px;
+}
+
+.chat-bubble {
+    margin: 10px;
+    width: 20rem;
+}
+.self{
+    float:right;
+    clear:both;
+}
+.timestampSpan{
+    float:right;
 }

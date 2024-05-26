@@ -14,9 +14,9 @@
   </ion-header>
   <ion-content class="chat-container" #ChatContainer>
     
-    <ion-card *ngFor="let item of items$ | async" class="chat-bubble" [ngClass]="{'self': item.author === 'Alex'}">
+    <ion-card *ngFor="let item of items$ | async" class="chat-bubble" [ngClass]="{'self': item.author === settings.name}">
       <ion-card-header>
-        <ion-card-subtitle>{{item.author}} ({{getDate(item.timestamp)}})</ion-card-subtitle>
+        <ion-card-subtitle>{{item.author}} <span class="timestampSpan">{{getDate(item.timestamp)}}</span></ion-card-subtitle>
       </ion-card-header>
     
       <ion-card-content>{{item.text}}</ion-card-content>
@@ -33,7 +33,7 @@
   
   <ng-container *ngIf="getLocalStorageName()!==''">
     <ion-input [(ngModel)]="newMessage" ngDefaultControl placeholder="Nachricht...">
-      <ion-icon slot="icon-only" slot="end" name="send" (click)="sendNewMessage()"></ion-icon>
+      <ion-icon slot="icon-only" slot="end" name="send" (click)="sendNewMessage($event)"></ion-icon>
     </ion-input>
   </ng-container>
 </ion-footer>

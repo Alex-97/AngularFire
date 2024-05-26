@@ -31,7 +31,8 @@ export class Tab1Page implements OnInit{
 		this.items$ = collectionData(this.query);
 	}
 
-	async sendNewMessage() {
+	async sendNewMessage(event: Event) {
+		event.preventDefault();
 		const aCollection = collection(this.firestore, this.databaseName);
 		let timestamp = serverTimestamp();
 		if(this.settings.name !== ''){
@@ -39,6 +40,8 @@ export class Tab1Page implements OnInit{
 				author: this.settings.name,
 				text: this.newMessage,
 				timestamp: timestamp
+			}).then(() => {
+				this.scrollToBottomOnInit();
 			});
 		}
 		return;
@@ -49,22 +52,28 @@ export class Tab1Page implements OnInit{
 		if(storedSettings) {
 			this.settings = JSON.parse(storedSettings);
 		}
-		this.scrollToBottomOnInit();
+		this.scrollToBottomOnInit();    
+		//window.scrollTo(0, document.body.scrollHeight);
+
 	}
 
 	ionViewWillEnter(){
 		this.scrollToBottom();
+		//window.scrollTo(0, document.body.scrollHeight);
 	}
 	scrollToBottom() {
-		this.chatContainer.scrollToBottom(300);
+		this.chatContainer.scrollToBottom(0);
+		//window.scrollTo(0, document.body.scrollHeight);
 	}
 	
 	scrollToBottomOnInit() {
 		setTimeout(() => {
 			if (this.chatContainer.scrollToBottom) {
 				this.scrollToBottom();
+				//console.log("?");
 			}
-		}, 500);
+		}, 1000);
+		//window.scrollTo(0, document.body.scrollHeight);
 	}
 	  
 	getLocalStorageName(): string {
@@ -76,9 +85,21 @@ export class Tab1Page implements OnInit{
 		return "";
 	}
 	
-	getDate(arg0: any): string {
-		if (typeof arg0.toDate === 'function') {
-			return arg0.toDate().toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+	getDate(possibleDate: any): string {
+		if(possibleDate === undefined) {
+			return "ERROR";
+		}
+		if(possibleDate === null) {
+			return "ERROR";
+		}
+		if (typeof possibleDate.toDate === 'function') {
+			const today = new Date();
+			const messageDate = possibleDate.toDate();
+			if (messageDate.toDateString() === today.toDateString()) {
+				return messageDate.toLocaleString('de-DE', { hour: '2-digit', minute: '2-digit' });
+			} else {
+				return messageDate.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+			}
 		} else {
 			return "ERROR";
 		}
