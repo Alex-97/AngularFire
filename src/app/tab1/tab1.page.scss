@@ -1,0 +1,14 @@
+.chatBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+ion-input {
+    --padding-end: 1rem;
+    --padding-start: 1rem;
+    background:gray;
+    width: 80%;
+    margin: 10px;
+    --border-radius: 40px;
+}

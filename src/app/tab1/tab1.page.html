@@ -12,19 +12,28 @@
       <ion-title size="large">Chat</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content>
-    <div class="chat-container">
-      <div *ngFor="let item of items$ | async" class="chat-bubble" [ngClass]="{'self': item.author === 'Alex'}">
-        <div class="chat-author">{{item.author}}</div>
-        <div class="chat-text">{{item.text}}</div>
-        <div class="chat-timestamp">{{item.timestamp.toDate() | date:'shortTime'}}</div>
-      </div>
-    </div>
+  <ion-content class="chat-container" #ChatContainer>
+    
+    <ion-card *ngFor="let item of items$ | async" class="chat-bubble" [ngClass]="{'self': item.author === 'Alex'}">
+      <ion-card-header>
+        <ion-card-subtitle>{{item.author}} ({{getDate(item.timestamp)}})</ion-card-subtitle>
+      </ion-card-header>
+    
+      <ion-card-content>{{item.text}}</ion-card-content>
+    </ion-card>
   </ion-content>
-  <ion-footer>
-    <ion-toolbar>
-      <ion-input [(ngModel)]="newMessage" placeholder="Type a message"></ion-input>
-      <ion-button (click)="sendNewMessage()">Send</ion-button>
-    </ion-toolbar>
-  </ion-footer>
 </ion-content>
+<ion-footer class="chatBox">
+  
+  <ng-container *ngIf="getLocalStorageName() === ''">
+    <ion-input [disabled]="true" ngDefaultControl placeholder="BITTE NAMEN IN EINSTELLUNGEN EINGEBEN!">
+      <ion-icon slot="icon-only" slot="end" name="send"></ion-icon>
+    </ion-input>
+  </ng-container>
+  
+  <ng-container *ngIf="getLocalStorageName()!==''">
+    <ion-input [(ngModel)]="newMessage" ngDefaultControl placeholder="Nachricht...">
+      <ion-icon slot="icon-only" slot="end" name="send" (click)="sendNewMessage()"></ion-icon>
+    </ion-input>
+  </ng-container>
+</ion-footer>
