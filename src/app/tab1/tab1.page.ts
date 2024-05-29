@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonFooter, IonInput, IonButton, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, IonCardContent, IonIcon, IonToast } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-import { Firestore, addDoc, collection, collectionData, orderBy, query, serverTimestamp} from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Firestore, addDoc, collection, collectionData, limit, orderBy, query, serverTimestamp, where} from '@angular/fire/firestore';
+import { Observable, map } from 'rxjs';
 import { NgFor, NgIf, AsyncPipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Settings } from '../tab2/settings';
@@ -27,8 +27,11 @@ export class Tab1Page implements OnInit{
 
 	constructor() {
 		const aCollection = collection(this.firestore, this.databaseName);
-		this.query = query(aCollection, orderBy('timestamp', 'asc'));
-		this.items$ = collectionData(this.query);
+		this.query = query(aCollection, 
+			where('timestamp', '>', new Date(2024, 1, 1)),
+			orderBy('timestamp', 'desc'),
+			limit(50));
+		this.items$ = collectionData(this.query).pipe(map(items => items.reverse())); 
 	}
 
 	async sendNewMessage(event: Event) {
@@ -41,7 +44,10 @@ export class Tab1Page implements OnInit{
 				text: this.newMessage,
 				timestamp: timestamp
 			}).then(() => {
+				this.scrollToBottom();
 				this.scrollToBottomOnInit();
+
+				this.newMessage = '';
 			});
 		}
 		return;
@@ -80,7 +86,9 @@ export class Tab1Page implements OnInit{
 		const storedSettings = localStorage.getItem('settings');
 		if(storedSettings) {
 			this.settings = JSON.parse(storedSettings);
-			return this.settings.name;
+			if(this.settings.name !== undefined){
+				return this.settings.name;
+			}
 		}
 		return "";
 	}

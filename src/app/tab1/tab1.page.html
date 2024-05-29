@@ -26,13 +26,13 @@
 <ion-footer class="chatBox">
   
   <ng-container *ngIf="getLocalStorageName() === ''">
-    <ion-input [disabled]="true" ngDefaultControl placeholder="BITTE NAMEN IN EINSTELLUNGEN EINGEBEN!">
+    <ion-input name="chatInput" [disabled]="true" placeholder="BITTE NAMEN IN EINSTELLUNGEN EINGEBEN!">
       <ion-icon slot="icon-only" slot="end" name="send"></ion-icon>
     </ion-input>
   </ng-container>
   
   <ng-container *ngIf="getLocalStorageName()!==''">
-    <ion-input [(ngModel)]="newMessage" ngDefaultControl placeholder="Nachricht...">
+    <ion-input name="chatInput" [(ngModel)]="newMessage" (keyup.enter)="sendNewMessage($event)" placeholder="Nachricht...">
       <ion-icon slot="icon-only" slot="end" name="send" (click)="sendNewMessage($event)"></ion-icon>
     </ion-input>
   </ng-container>
